@@ -1,3 +1,54 @@
+# 🛠️ UstaTop - Your Ultimate Master Service Platform
+
+UstaTop is a full-fledged system designed to manage masters, tools, orders, and services efficiently. It includes features like role-based access control (RBAC), filtering, pagination, search, sorting, and multi-language support for a seamless user experience.
+
+---
+
+## 🌟 Features
+
+### 🔑 Role-Based Access Control (RBAC)
+- **ADMIN**: Full access.
+- **SUPER_ADMIN**: View and update everything.
+- **VIEWER_ADMIN**: Limited access (orders, masters, tools only).
+- **USER_FIZ & USER_YUR**: Different user roles for individuals and legal entities.
+
+### 📋 Modules
+#### **Sessions**
+- Information about session date and device.
+
+#### **Region**
+- Supports `name_uz`, `name_ru`, `name_en`.
+- Includes filtering, pagination, search, and sorting.
+
+#### **Tools**
+- Manage tools with fields such as `name`, `description`, `price`, `quantity`, and more.
+- Includes filtering, pagination, search, and sorting.
+
+#### **Masters**
+- Manage master profiles with details like `fullName`, `products`, `experience`, `image`, and `star` ratings.
+
+#### **Orders**
+- Comprehensive order management with location, tools, payment types, and statuses.
+
+#### **General Info**
+- Centralized platform information (email, links, phone numbers).
+
+#### **FAQ, Contact, Partners**
+- Modular support for FAQs, contact forms, and partner showcases.
+
+---
+
+## 📌 Key Functionalities
+- 🔍 Advanced **filtering, search, sorting, and pagination** for all modules.
+- 🌍 Multi-language support (`uz`, `ru`, `en`).
+- 📷 Image and file upload capabilities.
+- 🤖 Integration with Telegram bot for order updates.
+- 🔐 RBAC for secure access.
+
+---
+
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>

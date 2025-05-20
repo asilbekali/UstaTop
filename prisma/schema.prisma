@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Connnection tables
+
+model region {
+  id   Int    @id @default(autoincrement())
+  name String
+  user user[]
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  full_name String
+  password  String
+  phone     String
+  region    region   @relation(fields: [regionId], references: [id])
+  type      UserType
+  bank      String?
+  address   String?
+  okend     String?
+  inn       String?
+  pc        String?
+  mfo       String?
+  createAt  DateTime @default(now())
+  regionId  Int
+}
+
+model level {
+  id       Int       @id @default(autoincrement())
+  name     String
+  createAt DateTime  @default(now())
+  product  product[]
+}
+
+model brend {
+  id       Int      @id @default(autoincrement())
+  name     String
+  createAt DateTime @default(now())
+}
+
+model size {
+  id       Int      @id @default(autoincrement())
+  name     String
+  createAt DateTime @default(now())
+  tools    tools[]
+}
+
+model tools {
+  id       Int       @id @default(autoincrement())
+  name     String
+  price    Int
+  count    Int
+  code     Int       @unique @default(autoincrement())
+  isActive Boolean   @default(false)
+  capasity String
+  size     size      @relation(fields: [sizeId], references: [id])
+  image    String
+  createAt DateTime  @default(now())
+  sizeId   Int
+  product  product[]
+}
+
+model product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  isActive    Boolean  @default(false)
+  image       String
+  minWorkHour Int
+  level       level    @relation(fields: [levelId], references: [id])
+  priceHour   Int
+  priceDay    Int
+  tools       tools    @relation(fields: [toolsId], references: [id])
+  createAt    DateTime @default(now())
+  levelId     Int
+  toolsId     Int
+}
+
+model master {
+  id       Int      @id @default(autoincrement())
+  // masterni yakuniga yetkazib qoyish kerak !
+  createAt DateTime @default(now())
+}
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// No SQL tables
+
+model my_sessions {
+  id         Int      @id @default(autoincrement())
+  deviceName String
+  deviceIP   String
+  createAt   DateTime @default(now())
+}
+
+model showCase {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  link        String
+}
+
+model general {
+  id        Int    @id @default(autoincrement())
+  email     String
+  links     String
+  phone     String
+  addminsTg String
+}
+
+model sugesstion {
+  id       Int    @id @default(autoincrement())
+  name     String
+  suerName String
+  message  String
+}
+
+model partners {
+  id    Int    @id @default(autoincrement())
+  name  String
+  image String
+}
+
+model faq {
+  id       Int    @id @default(autoincrement())
+  question String
+  answer   String
+}
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Enuml
+
+enum UserType {
+  yuridik
+  fizichski
+}

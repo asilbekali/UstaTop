@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,7 +11,7 @@ datasource db {
 }
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Connnection tables
+// Connection tables
 
 model region {
   id   Int    @id @default(autoincrement())
@@ -23,11 +20,11 @@ model region {
 }
 
 model user {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   full_name String
   password  String
-  phone     String
-  region    region   @relation(fields: [regionId], references: [id])
+  email     String     @unique
+  region    region     @relation(fields: [regionId], references: [id])
   type      UserType
   bank      String?
   address   String?
@@ -35,21 +32,26 @@ model user {
   inn       String?
   pc        String?
   mfo       String?
-  createAt  DateTime @default(now())
+  createAt  DateTime   @default(now())
   regionId  Int
+  role      role
+  status    UserStatus?
 }
 
 model level {
-  id       Int       @id @default(autoincrement())
-  name     String
-  createAt DateTime  @default(now())
-  product  product[]
+  id          Int           @id @default(autoincrement())
+  name        String
+  createAt    DateTime      @default(now())
+  product     product[]     @relation("ProLevel")
+  masters     master[]      @relation("MasterLevel")
+  order_iteam order_iteam[]
 }
 
 model brend {
   id       Int      @id @default(autoincrement())
   name     String
   createAt DateTime @default(now())
+  tools    tools[]
 }
 
 model size {
@@ -60,38 +62,118 @@ model size {
 }
 
 model tools {
-  id       Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
+  name        String
+  price       Int
+  count       Int
+  code        Int           @unique @default(autoincrement())
+  isActive    Boolean       @default(false)
+  capasityId  Int
+  capasity    capasity      @relation(fields: [capasityId], references: [id])
+  size        size          @relation(fields: [sizeId], references: [id])
+  image       String
+  createAt    DateTime      @default(now())
+  sizeId      Int
+  brend       brend         @relation(fields: [brendId], references: [id])
+  product     product[]     @relation("ProTools")
+  brendId     Int
+  masters     master[]      @relation("MasterTools")
+  order_iteam order_iteam[]
+}
+
+model capasity {
+  id       Int      @id @default(autoincrement())
   name     String
-  price    Int
-  count    Int
-  code     Int       @unique @default(autoincrement())
-  isActive Boolean   @default(false)
-  capasity String
-  size     size      @relation(fields: [sizeId], references: [id])
-  image    String
-  createAt DateTime  @default(now())
-  sizeId   Int
-  product  product[]
+  createAt DateTime @default(now())
+  tools    tools[]
 }
 
 model product {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
-  isActive    Boolean  @default(false)
+  isActive    Boolean       @default(true)
   image       String
   minWorkHour Int
-  level       level    @relation(fields: [levelId], references: [id])
+  level       level[]       @relation("ProLevel")
   priceHour   Int
   priceDay    Int
-  tools       tools    @relation(fields: [toolsId], references: [id])
-  createAt    DateTime @default(now())
-  levelId     Int
-  toolsId     Int
+  tools       tools[]       @relation("ProTools")
+  createAt    DateTime      @default(now())
+  masters     master[]      @relation("MasterLevel")
+  order_iteam order_iteam[]
 }
 
 model master {
+  id            Int       @id @default(autoincrement())
+  full_name     String
+  email         String
+  isActive      Boolean   @default(true)
+  year          Int
+  priceHour     Int
+  priceDay      Int
+  exprience     Int
+  createAt      DateTime  @default(now())
+  tools         tools[]   @relation("MasterTools")
+  image         String
+  passpoerImage String
+  star          Int
+  about         String
+  masterLevel   level[]   @relation("MasterLevel")
+  product       product[] @relation("MasterLevel")
+}
+
+model comment {
   id       Int      @id @default(autoincrement())
-  // masterni yakuniga yetkazib qoyish kerak !
+  message  String
+  stars    Int
+  masterId Int
+  createAt DateTime @default(now())
+}
+
+model order_iteam {
+  id           Int      @id @default(autoincrement())
+  product      product  @relation(fields: [productId], references: [id])
+  productLevel level    @relation(fields: [levelId], references: [id])
+  count        Int
+  measuer      measuer
+  total        Int
+  location     String
+  address      String
+  data         DateTime
+  pymentType   String
+  withDeliver  Boolean
+  status       Boolean  @default(true)
+  tools        tools    @relation(fields: [toolsId], references: [id])
+  createAt     DateTime @default(now())
+  productId    Int
+  levelId      Int
+  toolsId      Int
+  backetId     Int
+  order        order    @relation(fields: [orderId], references: [id])
+  orderId      Int
+}
+
+model order {
+  id                Int                 @id @default(autoincrement())
+  order_iteamId     Int
+  order_iteam       order_iteam[]
+  createAt          DateTime            @default(now())
+  backet            backet[]
+  admin_check_order admin_check_order[]
+}
+
+model backet {
+  id       Int      @id @default(autoincrement())
+  order    order    @relation(fields: [orderId], references: [id])
+  orderId  Int
+  createAt DateTime @default(now())
+}
+
+model admin_check_order {
+  id       Int      @id @default(autoincrement())
+  order    order    @relation(fields: [orderId], references: [id])
+  orderId  Int
+  status   status
   createAt DateTime @default(now())
 }
 
@@ -146,4 +228,29 @@ model faq {
 enum UserType {
   yuridik
   fizichski
+}
+
+enum measuer {
+  day
+  hour
+}
+
+enum status {
+  active
+  pending
+  rejected
+  payed
+}
+
+enum role {
+  admin
+  super_admin
+  viwer_admin
+  user_fiz
+  user_yur
+}
+
+enum UserStatus {
+  active
+  noActive
 }

@@ -22,5 +22,5 @@ export class CreateGeneralDto {
 
   @IsString({ message: 'Admin Telegram username must be a string' })
   @IsNotEmpty({ message: 'Admin Telegram username is required' })
-  adminTg: string;
+  addminsTg: string;
 }

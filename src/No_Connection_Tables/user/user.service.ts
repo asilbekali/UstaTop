@@ -5,15 +5,15 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { UserStatus, UserType } from '@prisma/client';
 import { authenticator } from 'otplib';
-import { MailService } from 'src/mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 const DeviceDetector = require('device-detector-js');
 import { Request } from 'express';
 import { name } from 'ejs';
+import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UserService {

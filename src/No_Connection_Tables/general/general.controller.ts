@@ -13,11 +13,10 @@ import { ApiTags, ApiQuery, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { GeneralService } from './general.service';
 import { CreateGeneralDto } from './dto/create-general.dto';
 import { UpdateGeneralDto } from './dto/update-general.dto';
-import { AuthGuard } from 'src/Guards/auth.guard';
-import { RoleDec } from 'src/user/decorator/roles.decorator';
-import { Role } from 'src/user/enum/role.enum';
-import { RolesGuard } from 'src/Guards/roles.guard';
-
+import { AuthGuard } from '../Guards/auth.guard';
+import { Role } from '../user/enum/role.enum';
+import { RolesGuard } from '../Guards/roles.guard';
+import { RoleDec } from '../user/decorator/roles.decorator';
 @UseGuards(AuthGuard)
 @ApiTags('General')
 @Controller('general')

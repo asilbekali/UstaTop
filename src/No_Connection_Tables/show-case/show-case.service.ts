@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateShowCaseDto } from './dto/create-show-case.dto';
 import { UpdateShowCaseDto } from './dto/update-show-case.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ShowCaseService {

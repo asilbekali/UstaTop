@@ -20,11 +20,10 @@ import {
 import { RegionService } from './region.service';
 import { CreateRegionDto } from './dto/create-region.dto';
 import { UpdateRegionDto } from './dto/update-region.dto';
-import { AuthGuard } from 'src/Guards/auth.guard';
-import { RoleDec } from 'src/user/decorator/roles.decorator';
-import { Role } from 'src/user/enum/role.enum';
-import { RolesGuard } from 'src/Guards/roles.guard';
-
+import { RoleDec } from '../user/decorator/roles.decorator';
+import { Role } from '../user/enum/role.enum';
+import { RolesGuard } from '../Guards/roles.guard';
+import { AuthGuard } from '../Guards/auth.guard';
 @ApiTags('region')
 @Controller('region')
 export class RegionController {

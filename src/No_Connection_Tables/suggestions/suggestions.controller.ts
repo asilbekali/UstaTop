@@ -19,10 +19,10 @@ import {
 import { SuggestionsService } from './suggestions.service';
 import { CreateSuggestionDto } from './dto/create-suggestion.dto';
 import { UpdateSuggestionDto } from './dto/update-suggestion.dto';
-import { AuthGuard } from 'src/Guards/auth.guard';
-import { RoleDec } from 'src/user/decorator/roles.decorator';
-import { Role } from 'src/user/enum/role.enum';
-import { RolesGuard } from 'src/Guards/roles.guard';
+import { AuthGuard } from '../Guards/auth.guard';
+import { RoleDec } from '../user/decorator/roles.decorator';
+import { Role } from '../user/enum/role.enum';
+import { RolesGuard } from '../Guards/roles.guard';
 
 @UseGuards(AuthGuard)
 @ApiTags('suggestions')

@@ -20,11 +20,11 @@ model region {
 }
 
 model user {
-  id        Int        @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   full_name String
   password  String
-  email     String     @unique
-  region    region     @relation(fields: [regionId], references: [id])
+  email     String      @unique
+  region    region      @relation(fields: [regionId], references: [id])
   type      UserType
   bank      String?
   address   String?
@@ -32,7 +32,7 @@ model user {
   inn       String?
   pc        String?
   mfo       String?
-  createAt  DateTime   @default(now())
+  createAt  DateTime    @default(now())
   regionId  Int
   role      role
   status    UserStatus?
@@ -80,6 +80,8 @@ model tools {
   masters     master[]      @relation("MasterTools")
   order_iteam order_iteam[]
 }
+
+// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model capasity {
   id       Int      @id @default(autoincrement())
@@ -149,24 +151,23 @@ model order_iteam {
   levelId      Int
   toolsId      Int
   backetId     Int
-  order        order    @relation(fields: [orderId], references: [id])
-  orderId      Int
+  backet       backet   @relation(fields: [backetId], references: [id])
 }
 
 model order {
   id                Int                 @id @default(autoincrement())
-  order_iteamId     Int
-  order_iteam       order_iteam[]
   createAt          DateTime            @default(now())
-  backet            backet[]
   admin_check_order admin_check_order[]
+  backetId          Int
+  backet            backet              @relation(fields: [backetId], references: [id])
 }
 
 model backet {
-  id       Int      @id @default(autoincrement())
-  order    order    @relation(fields: [orderId], references: [id])
-  orderId  Int
-  createAt DateTime @default(now())
+  id          Int           @id @default(autoincrement())
+  createAt    DateTime      @default(now())
+  order_iteam order_iteam[]
+  order_Id    Int
+  order       order[]
 }
 
 model admin_check_order {

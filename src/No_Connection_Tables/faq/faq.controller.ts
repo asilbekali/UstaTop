@@ -33,6 +33,7 @@ export class FaqController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new FAQ' })
   @ApiBody({
@@ -150,6 +151,7 @@ export class FaqController {
 
   @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a specific FAQ by ID' })
   @ApiParam({

@@ -17,7 +17,6 @@ import { AuthGuard } from '../Guards/auth.guard';
 import { Role } from '../user/enum/role.enum';
 import { RolesGuard } from '../Guards/roles.guard';
 import { RoleDec } from '../user/decorator/roles.decorator';
-@UseGuards(AuthGuard)
 @ApiTags('General')
 @Controller('general')
 export class GeneralController {
@@ -25,6 +24,7 @@ export class GeneralController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new general record' })
   @ApiBody({
@@ -89,6 +89,7 @@ export class GeneralController {
 
   @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a general record by ID' })
   @ApiBody({
@@ -108,6 +109,7 @@ export class GeneralController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a general record by ID' })
   remove(@Param('id') id: string) {

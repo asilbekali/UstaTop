@@ -24,7 +24,6 @@ import { RoleDec } from '../user/decorator/roles.decorator';
 import { Role } from '../user/enum/role.enum';
 import { RolesGuard } from '../Guards/roles.guard';
 
-@UseGuards(AuthGuard)
 @ApiTags('partners')
 @Controller('partners')
 export class PartnersController {
@@ -32,6 +31,7 @@ export class PartnersController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new partner' })
   @ApiBody({
@@ -99,6 +99,7 @@ export class PartnersController {
 
   @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a partner by ID' })
   @ApiParam({
@@ -125,6 +126,7 @@ export class PartnersController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a partner by ID' })
   @ApiParam({

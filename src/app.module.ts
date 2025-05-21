@@ -12,6 +12,8 @@ import { PartnersModule } from './No_Connection_Tables/partners/partners.module'
 import { FaqModule } from './No_Connection_Tables/faq/faq.module';
 import { LevelModule } from './level/level.module';
 import { CapacityModule } from './capacity/capacity.module';
+import { SizeModule } from './size/size.module';
+import { BrendModule } from './brend/brend.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { CapacityModule } from './capacity/capacity.module';
     FaqModule,
     LevelModule,
     CapacityModule,
+    SizeModule,
+    BrendModule,
   ],
   controllers: [AppController],
   providers: [AppService],

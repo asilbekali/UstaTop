@@ -24,7 +24,6 @@ import { RoleDec } from '../user/decorator/roles.decorator';
 import { Role } from '../user/enum/role.enum';
 import { RolesGuard } from '../Guards/roles.guard';
 
-@UseGuards(AuthGuard)
 @ApiTags('suggestions')
 @Controller('suggestions')
 export class SuggestionsController {
@@ -32,6 +31,7 @@ export class SuggestionsController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new suggestion' })
   @ApiBody({
@@ -100,6 +100,7 @@ export class SuggestionsController {
 
   @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a suggestion by ID' })
   @ApiParam({
@@ -130,6 +131,7 @@ export class SuggestionsController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a suggestion by ID' })
   @ApiParam({

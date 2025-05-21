@@ -18,7 +18,6 @@ import { RoleDec } from '../user/decorator/roles.decorator';
 import { Role } from '../user/enum/role.enum';
 import { RolesGuard } from '../Guards/roles.guard';
 
-@UseGuards(AuthGuard)
 @ApiTags('ShowCase')
 @Controller('show-case')
 export class ShowCaseController {
@@ -26,6 +25,7 @@ export class ShowCaseController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new showcase record' })
   @ApiBody({
@@ -84,6 +84,7 @@ export class ShowCaseController {
 
   @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a showcase record by ID' })
   @ApiBody({
@@ -104,11 +105,9 @@ export class ShowCaseController {
     return this.showCaseService.update(+id, updateShowCaseDto);
   }
 
-
-
-
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a showcase record by ID' })
   remove(@Param('id') id: string) {

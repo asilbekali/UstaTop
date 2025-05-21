@@ -13,6 +13,7 @@ import { MailService } from 'src/mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 const DeviceDetector = require('device-detector-js');
 import { Request } from 'express';
+import { name } from 'ejs';
 
 @Injectable()
 export class UserService {
@@ -252,35 +253,42 @@ export class UserService {
     return { AccestToken: this.getAccessToken(bazaUser) };
   }
 
-  // Siz so‘ragan logDeviceInfo funksiyasi:
   async logDeviceInfo(req: any) {
-    // IP manzilni olish
     const ip =
       req.headers['x-forwarded-for']?.toString().split(',')[0].trim() ||
       req.socket.remoteAddress ||
       'Unknown IP';
 
-    // User-Agent header ni olish
     const userAgent = req.headers['user-agent'] || '';
 
-    // DeviceDetector ni ishga tushiramiz
     const deviceDetector = new DeviceDetector();
     const device = deviceDetector.parse(userAgent.toString());
 
-    // Qurilma nomini aniqlaymiz
     const deviceName =
       device.device?.type || device.client?.name || 'Unknown device';
 
-    // Log qilish
-    console.log(`User IP: ${ip}`);
-    console.log(`User Device: ${deviceName}`);
+    const bazaSession = await this.prisma.my_sessions.findFirst({
+      where: { deviceIP: ip },
+    });
 
-    // Natijani return qilamiz
-    return {
-      ip,
-      deviceName,
-    };
+    if (bazaSession) {
+      return bazaSession;
+    }
+
+    const newSession = await this.prisma.my_sessions.create({
+      data: {
+        deviceIP: ip,
+        deviceName: deviceName,
+      },
+    });
+
+    return newSession;
   }
-}
 
-// device dedectorni bazaga my sesionsga saqlab qoyish kerak
+
+
+  
+
+  
+
+}

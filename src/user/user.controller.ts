@@ -19,12 +19,17 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserType } from '@prisma/client';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  
+  @Get('mySession')
+  async session(@Req() req: Request) {
+    return this.userService.logDeviceInfo(req);
+  }
 
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
@@ -210,10 +215,5 @@ export class UserController {
     @Body('email') email: string,
   ) {
     return this.userService.getAccessToken(password);
-  }
-
-  @Get('My_Sessions')
-  session(@Req() req: Request) {
-    return this.userService.logDeviceInfo(req);
   }
 }

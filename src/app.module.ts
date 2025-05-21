@@ -9,6 +9,7 @@ import { MulterModule } from './multe-r/multer.module';
 import { ShowCaseModule } from './show-case/show-case.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { PartnersModule } from './partners/partners.module';
+import { FaqModule } from './faq/faq.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PartnersModule } from './partners/partners.module';
     ShowCaseModule,
     SuggestionsModule,
     PartnersModule,
+    FaqModule,
   ],
   controllers: [AppController],
   providers: [AppService],

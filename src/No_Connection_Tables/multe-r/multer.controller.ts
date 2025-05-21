@@ -55,7 +55,7 @@ export class MulterController {
     const filePath = path.join('./uploads', filename);
     if (!fs.existsSync(filePath)) {
       console.log(filePath);
-      
+
       return this.multerService.findOne(filePath);
     }
     res.sendFile(filePath, { root: '.' });

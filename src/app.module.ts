@@ -14,6 +14,7 @@ import { LevelModule } from './level/level.module';
 import { CapacityModule } from './capacity/capacity.module';
 import { SizeModule } from './size/size.module';
 import { BrendModule } from './brend/brend.module';
+import { ToolModule } from './tool/tool.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { BrendModule } from './brend/brend.module';
     CapacityModule,
     SizeModule,
     BrendModule,
+    ToolModule,
   ],
   controllers: [AppController],
   providers: [AppService],

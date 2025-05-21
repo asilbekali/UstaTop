@@ -10,6 +10,7 @@ import { ShowCaseModule } from './No_Connection_Tables/show-case/show-case.modul
 import { SuggestionsModule } from './No_Connection_Tables/suggestions/suggestions.module';
 import { PartnersModule } from './No_Connection_Tables/partners/partners.module';
 import { FaqModule } from './No_Connection_Tables/faq/faq.module';
+import { LevelModule } from './level/level.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FaqModule } from './No_Connection_Tables/faq/faq.module';
     SuggestionsModule,
     PartnersModule,
     FaqModule,
+    LevelModule,
   ],
   controllers: [AppController],
   providers: [AppService],

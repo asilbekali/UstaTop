@@ -11,6 +11,7 @@ import { SuggestionsModule } from './No_Connection_Tables/suggestions/suggestion
 import { PartnersModule } from './No_Connection_Tables/partners/partners.module';
 import { FaqModule } from './No_Connection_Tables/faq/faq.module';
 import { LevelModule } from './level/level.module';
+import { CapacityModule } from './capacity/capacity.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { LevelModule } from './level/level.module';
     PartnersModule,
     FaqModule,
     LevelModule,
+    CapacityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

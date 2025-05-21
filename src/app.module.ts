@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { GeneralModule } from './general/general.module';
 import { MulterModule } from './multe-r/multer.module';
 import { ShowCaseModule } from './show-case/show-case.module';
+import { SuggestionsModule } from './suggestions/suggestions.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ShowCaseModule } from './show-case/show-case.module';
     GeneralModule,
     MulterModule,
     ShowCaseModule,
+    SuggestionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

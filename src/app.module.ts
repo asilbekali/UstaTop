@@ -15,6 +15,7 @@ import { CapacityModule } from './capacity/capacity.module';
 import { SizeModule } from './size/size.module';
 import { BrendModule } from './brend/brend.module';
 import { ToolModule } from './tool/tool.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ToolModule } from './tool/tool.module';
     SizeModule,
     BrendModule,
     ToolModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

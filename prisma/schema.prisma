@@ -81,14 +81,14 @@ model tools {
   order_iteam order_iteam[]
 }
 
-// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
-
 model capasity {
   id       Int      @id @default(autoincrement())
   name     String
   createAt DateTime @default(now())
   tools    tools[]
 }
+
+// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model product {
   id          Int           @id @default(autoincrement())
@@ -104,6 +104,8 @@ model product {
   masters     master[]      @relation("MasterLevel")
   order_iteam order_iteam[]
 }
+
+// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model master {
   id            Int       @id @default(autoincrement())

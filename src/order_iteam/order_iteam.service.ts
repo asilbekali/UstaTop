@@ -40,6 +40,7 @@ export class OrderIteamService {
   async validateOrderIteam(id: number) {
     const orderIteam = await this.prisma.order_iteam.findUnique({
       where: { id },
+      include: { orderIteamTools: true },
     });
     if (!orderIteam) {
       throw new NotFoundException(`Order item with ID ${id} not found.`);
@@ -60,7 +61,6 @@ export class OrderIteamService {
 
     await this.validateProductAndLevel(dto.productId, dto.levelId);
 
-   
     if (dto.tools && dto.tools.length > 0) {
       const toolsExist = await this.prisma.tools.findMany({
         where: { id: { in: dto.tools } },
@@ -122,6 +122,7 @@ export class OrderIteamService {
         where: filters,
         skip,
         take: limit,
+        include: { orderIteamTools: true },
       }),
       this.prisma.order_iteam.count({ where: filters }),
     ]);
@@ -176,6 +177,10 @@ export class OrderIteamService {
 
   async remove(id: number) {
     await this.validateOrderIteam(id);
+    await this.prisma.orderIteamTools.deleteMany({
+      where: { order_iteamId: id },
+    });
+
     return this.prisma.order_iteam.delete({ where: { id } });
   }
 }

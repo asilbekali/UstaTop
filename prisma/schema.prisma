@@ -176,7 +176,7 @@ model order_iteam {
   productId       Int
   levelId         Int
   backetId        Int
-  backet          backet            @relation(fields: [backetId], references: [id])
+  backet          backet            @relation(fields: [backetId], references: [id], onDelete: Cascade)
   orderIteamTools orderIteamTools[]
 }
 
@@ -185,7 +185,7 @@ model orderIteamTools {
   toolsId       Int
   tools         tools       @relation(fields: [toolsId], references: [id])
   order_iteamId Int
-  order_iteam   order_iteam @relation(fields: [order_iteamId], references: [id])
+  order_iteam   order_iteam @relation(fields: [order_iteamId], references: [id], onDelete: Cascade)
   createAt      DateTime    @default(now())
 }
 
@@ -196,13 +196,14 @@ model order {
   createAt          DateTime            @default(now())
   admin_check_order admin_check_order[]
   backetId          Int
-  backet            backet              @relation(fields: [backetId], references: [id])
+  pay               status              @default(pending)
+  backet            backet              @relation(fields: [backetId], references: [id], onDelete: Cascade)
 }
 
 model backet {
   id          Int           @id @default(autoincrement())
   createAt    DateTime      @default(now())
-  userId      Int
+  userId      Int           @unique
   user        user          @relation(fields: [userId], references: [id])
   order_iteam order_iteam[]
   order       order[]

@@ -22,6 +22,7 @@ import { ProductToolsModule } from './product-tools/product-tools.module';
 import { CommentModule } from './comment/comment.module';
 import { OrderIteamModule } from './order_iteam/order_iteam.module';
 import { BacketModule } from './backet/backet.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { BacketModule } from './backet/backet.module';
     CommentModule,
     OrderIteamModule,
     BacketModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

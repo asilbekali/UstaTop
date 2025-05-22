@@ -14,8 +14,11 @@ import { CapacityModule } from './capacity/capacity.module';
 import { SizeModule } from './size/size.module';
 import { BrendModule } from './brend/brend.module';
 import { ToolModule } from './tool/tool.module';
-import { ProductModule } from './product/product.module';
 import { MulterModule } from './No_Connection_Tables/multe-r/multer.module';
+import { MasterModule } from './master/master.module';
+import { ProductModule } from './product/product.module';
+import { ProductLevelModule } from './product-level/product-level.module';
+import { ProductToolsModule } from './product-tools/product-tools.module';
 
 @Module({
   imports: [
@@ -33,7 +36,10 @@ import { MulterModule } from './No_Connection_Tables/multe-r/multer.module';
     SizeModule,
     BrendModule,
     ToolModule,
+    MasterModule,
     ProductModule,
+    ProductLevelModule,
+    ProductToolsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,166 +1,97 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import { PrismaService } from 'src/No_Connection_Tables/prisma/prisma.service';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PrismaService } from 'src/No_Connection_Tables/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { name } from 'ejs';
 
 @Injectable()
 export class ProductService {
   constructor(private readonly prisma: PrismaService) {}
-
   async create(dto: CreateProductDto) {
-    if (dto.tools && dto.tools.length > 0) {
-      for (const toolId of dto.tools) {
-        const toolExists = await this.prisma.tools.findUnique({
-          where: { id: toolId },
-        });
-        if (!toolExists) {
-          throw new NotFoundException(`Tool with ID ${toolId} not found`);
-        }
-      }
+    const bazaPro = await this.prisma.product.findFirst({
+      where: { name: dto.name },
+    });
+
+    if (bazaPro) {
+      throw new BadRequestException('Proffesion must be uniqe !');
     }
 
-    if (dto.masters && dto.masters.length > 0) {
-      for (const masterId of dto.masters) {
-        const masterExists = await this.prisma.master.findUnique({
-          where: { id: masterId },
-        });
-        if (!masterExists) {
-          throw new NotFoundException(`Master with ID ${masterId} not found`);
-        }
-      }
-    }
-
-    return this.prisma.product.create({
+    const newPro = await this.prisma.product.create({
       data: {
         name: dto.name,
-        image: dto.image || 'default-image-url.jpg',
-        minWorkHour: parseInt(dto.minWorkHour),
-        priceHour: dto.priceHour,
-        priceDay: dto.priceDay,
         isActive: true,
-        tools: dto.tools
-          ? {
-              connect: dto.tools.map((id) => ({ id })),
-            }
-          : undefined,
-        masters: dto.masters
-          ? {
-              connect: dto.masters.map((id) => ({ id })),
-            }
-          : undefined,
+        image: dto.image,
       },
     });
+
+    return newPro;
   }
 
-  async findAll({
-    page = 1,
-    limit = 10,
-    name,
-  }: {
-    page?: number;
-    limit?: number;
-    name?: string;
-  }) {
+  async findAll(query: { page?: number; limit?: number; name?: string }) {
+    const { page = 1, limit = 10, name } = query;
+
+    const where: Prisma.productWhereInput = name
+      ? {
+          name: {
+            contains: name,
+            mode: Prisma.QueryMode.insensitive,
+          },
+        }
+      : {};
+
     const skip = (page - 1) * limit;
-    const filters: any = {};
+    const take = Number(limit);
 
-    if (name) {
-      filters.name = { contains: name };
-    }
+    const [data, total] = await Promise.all([
+      this.prisma.product.findMany({
+        where,
+        skip,
+        take,
+        include: { productLevel: true, productTools: true},
+      }),
+      this.prisma.product.count({ where }),
+    ]);
 
-    return this.prisma.product.findMany({
-      where: filters,
-      skip,
-      take: limit,
-      include: { masters: true, tools: true },
-    });
+    return {
+      data,
+      total,
+      page,
+      limit,
+    };
   }
-
   async findOne(id: number) {
-    const product = await this.prisma.product.findFirst({
-      where: { id },
-      include: { masters: true, tools: true },
+    const product = await this.prisma.product.findUnique({
+      where: { id }, include: {productTools: true}
     });
 
     if (!product) {
-      throw new NotFoundException('Product not found!');
+      throw new BadRequestException(`Profession with ID ${id} not found`);
     }
 
     return product;
   }
 
-  async update(id: number, dto: UpdateProductDto) {
-    const existingProduct = await this.prisma.product.findUnique({
-      where: { id },
-    });
-    if (!existingProduct) {
-      throw new NotFoundException('Product not found!');
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const bazaPro = await this.findOne(id);
+    if (bazaPro) {
+      return {
+        updated_Profession: await this.prisma.product.update({
+          where: { id: id },
+          data: { name: updateProductDto.name, image: updateProductDto.image },
+        }),
+      };
     }
-
-    if (dto.tools) {
-      for (const toolId of dto.tools) {
-        const toolExists = await this.prisma.tools.findUnique({
-          where: { id: toolId },
-        });
-        if (!toolExists) {
-          throw new NotFoundException(`Tool with ID ${toolId} not found`);
-        }
-      }
-    }
-
-    if (dto.masters) {
-      for (const masterId of dto.masters) {
-        const masterExists = await this.prisma.master.findUnique({
-          where: { id: masterId },
-        });
-        if (!masterExists) {
-          throw new NotFoundException(`Master with ID ${masterId} not found`);
-        }
-      }
-    }
-
-    return this.prisma.product.update({
-      where: { id },
-      data: {
-        name: dto.name || existingProduct.name,
-        image: dto.image || existingProduct.image,
-        minWorkHour: dto.minWorkHour
-          ? parseInt(dto.minWorkHour)
-          : existingProduct.minWorkHour,
-        priceHour: dto.priceHour || existingProduct.priceHour,
-        priceDay: dto.priceDay || existingProduct.priceDay,
-        tools: dto.tools
-          ? {
-              set: dto.tools.map((toolId) => ({ id: toolId })),
-            }
-          : undefined,
-        masters: dto.masters
-          ? {
-              set: dto.masters.map((masterId) => ({ id: masterId })),
-            }
-          : undefined,
-      },
-    });
   }
 
   async remove(id: number) {
-    const existingProduct = await this.prisma.product.findUnique({
-      where: { id },
-    });
-
-    if (!existingProduct) {
-      throw new NotFoundException('Product not found!');
+    const bazaPro = await this.findOne(id);
+    if (bazaPro) {
+      return {
+        deleted_Profession: await this.prisma.product.delete({
+          where: { id: id },
+        }),
+      };
     }
-
-    await this.prisma.product.delete({ where: { id } });
-
-    return {
-      success: true,
-      message: 'Product deleted successfully',
-    };
   }
 }

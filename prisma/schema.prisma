@@ -39,12 +39,12 @@ model user {
 }
 
 model level {
-  id          Int           @id @default(autoincrement())
-  name        String
-  createAt    DateTime      @default(now())
-  product     product[]     @relation("ProLevel")
-  masters     master[]      @relation("MasterLevel")
-  order_iteam order_iteam[]
+  id            Int             @id @default(autoincrement())
+  name          String
+  createAt      DateTime        @default(now())
+  order_iteam   order_iteam[]
+  productLevel  productLevel[]
+  masterProduct masterProduct[]
 }
 
 model brend {
@@ -62,23 +62,22 @@ model size {
 }
 
 model tools {
-  id          Int           @id @default(autoincrement())
-  name        String
-  price       Int
-  count       Int
-  code        Int           @unique @default(autoincrement())
-  isActive    Boolean       @default(false)
-  capasityId  Int
-  capasity    capasity      @relation(fields: [capasityId], references: [id])
-  size        size          @relation(fields: [sizeId], references: [id])
-  image       String
-  createAt    DateTime      @default(now())
-  sizeId      Int
-  brend       brend         @relation(fields: [brendId], references: [id])
-  product     product[]     @relation("ProTools")
-  brendId     Int
-  masters     master[]      @relation("MasterTools")
-  order_iteam order_iteam[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  price        Int
+  count        Int
+  code         Int            @unique @default(autoincrement())
+  isActive     Boolean        @default(false)
+  capasityId   Int
+  capasity     capasity       @relation(fields: [capasityId], references: [id])
+  size         size           @relation(fields: [sizeId], references: [id])
+  image        String
+  createAt     DateTime       @default(now())
+  sizeId       Int
+  brend        brend          @relation(fields: [brendId], references: [id])
+  brendId      Int
+  order_iteam  order_iteam[]
+  productTools productTools[]
 }
 
 model capasity {
@@ -91,40 +90,77 @@ model capasity {
 // poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model product {
-  id          Int           @id @default(autoincrement())
-  name        String
-  isActive    Boolean       @default(true)
-  image       String
+  id            Int             @id @default(autoincrement())
+  name          String
+  isActive      Boolean         @default(false)
+  image         String
+  createAt      DateTime        @default(now())
+  order_iteam   order_iteam[]
+  productLevel  productLevel[]
+  productTools  productTools[]
+  masterProduct masterProduct[] // adawd
+}
+
+// /---------------------------------------------------------------------------
+
+model productLevel {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  product   product @relation(fields: [productId], references: [id])
+  levelId   Int
+  level     level   @relation(fields: [levelId], references: [id])
+
   minWorkHour Int
-  level       level[]       @relation("ProLevel")
   priceHour   Int
   priceDay    Int
-  tools       tools[]       @relation("ProTools")
-  createAt    DateTime      @default(now())
-  masters     master[]      @relation("MasterLevel")
-  order_iteam order_iteam[]
+  createAt    DateTime @default(now())
+}
+
+model productTools {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   product  @relation(fields: [productId], references: [id])
+  toolsId   Int
+  tools     tools    @relation(fields: [toolsId], references: [id])
+  createAt  DateTime @default(now())
 }
 
 // poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model master {
-  id            Int       @id @default(autoincrement())
+  id            Int             @id @default(autoincrement())
   full_name     String
   email         String
-  isActive      Boolean   @default(true)
+  isActive      Boolean         @default(true)
   year          Int
-  priceHour     Int
-  priceDay      Int
-  exprience     Int
-  createAt      DateTime  @default(now())
-  tools         tools[]   @relation("MasterTools")
   image         String
   passpoerImage String
   star          Int
   about         String
-  masterLevel   level[]   @relation("MasterLevel")
-  product       product[] @relation("MasterLevel")
+  createAt      DateTime        @default(now())
+  masterProduct masterProduct[]
 }
+
+// /---------------------------------------------------------------------------
+
+model masterProduct {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  product     product  @relation(fields: [productId], references: [id])
+  minWorkHour Int
+  levelId     Int
+  level       level    @relation(fields: [levelId], references: [id])
+  priceHour   Int
+  priceDay    Int
+  exprience   Int
+  masterId    Int
+  master      master   @relation(fields: [masterId], references: [id])
+  createAt    DateTime @default(now())
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+
+// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model comment {
   id       Int      @id @default(autoincrement())

@@ -19,6 +19,7 @@ import { MasterModule } from './master/master.module';
 import { ProductModule } from './product/product.module';
 import { ProductLevelModule } from './product-level/product-level.module';
 import { ProductToolsModule } from './product-tools/product-tools.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ProductToolsModule } from './product-tools/product-tools.module';
     ProductModule,
     ProductLevelModule,
     ProductToolsModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

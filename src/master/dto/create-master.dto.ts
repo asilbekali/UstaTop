@@ -1,98 +1,97 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsEmail,
   IsNumber,
   IsArray,
-  IsNotEmpty,
-  Min,
-  Max,
-  ArrayMinSize,
-  IsObject,
+  ValidateNested,
+  IsOptional,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+class JobDetailDto {
+  @ApiPropertyOptional({ example: 1, description: 'Profession ID' })
+  @IsOptional()
+  @IsNumber()
+  prof_id: number;
+
+  @ApiPropertyOptional({ example: 2, description: 'Level ID' })
+  @IsOptional()
+  @IsNumber()
+  level_id: number;
+
+  @ApiPropertyOptional({
+    example: 40,
+    description: 'Minimum work hours per week',
+  })
+  @IsOptional()
+  @IsNumber()
+  minworkhour: number;
+
+  @ApiPropertyOptional({ example: 100, description: 'Price per day' })
+  @IsOptional()
+  @IsNumber()
+  price_day: number;
+
+  @ApiPropertyOptional({ example: 15, description: 'Price per hour' })
+  @IsOptional()
+  @IsNumber()
+  price_hour: number;
+
+  @ApiPropertyOptional({ example: 5, description: 'Years of experience' })
+  @IsOptional()
+  @IsNumber()
+  experince: number;
+}
 
 export class CreateMasterDto {
-  @ApiProperty({ description: 'Full name of the master', example: 'John Doe' })
+  @ApiProperty({ example: 'John Doe' })
   @IsString()
-  @IsNotEmpty()
   full_name: string;
 
-  @ApiProperty({
-    description: 'Email address of the master',
-    example: 'johndoe@example.com',
-  })
+  @ApiProperty({ example: 'john.doe@example.com' })
   @IsEmail()
   email: string;
 
-  @ApiProperty({ description: 'Year of experience', example: 2025 })
+  @ApiProperty({ example: 1985 })
   @IsNumber()
-  @Min(1900)
-  @Max(new Date().getFullYear())
   year: number;
 
-  @ApiProperty({ description: 'Hourly price', example: 50 })
-  @IsNumber()
-  @Min(1)
-  priceHour: number;
-
-  @ApiProperty({ description: 'Daily price', example: 400 })
-  @IsNumber()
-  @Min(1)
-  priceDay: number;
-
-  @ApiProperty({ description: 'Years of experience', example: 5 })
-  @IsNumber()
-  @Min(0)
-  exprience: number;
-
-  @ApiProperty({
-    description: 'List of tools IDs used by the master',
-    example: [1, 2, 3],
-  })
-  @IsArray()
-  @ArrayMinSize(1)
-  tools: Array<number>;
-
-  @ApiProperty({
-    description: 'Image URL',
-    example: 'https://example.com/image.jpg',
-  })
+  @ApiProperty({ example: 'https://example.com/image.jpg' })
   @IsString()
-  @IsNotEmpty()
   image: string;
 
-  @ApiProperty({
-    description: 'Passport image URL',
-    example: 'https://example.com/passport.jpg',
-  })
+  @ApiProperty({ example: 'https://example.com/passport.jpg' })
   @IsString()
-  @IsNotEmpty()
   passpoerImage: string;
 
-  @ApiProperty({
-    description: 'Short description about the master',
-    example: 'Highly skilled in carpentry and woodworking',
-  })
+  @ApiProperty({ example: 'Experienced professional in...' })
   @IsString()
-  @IsNotEmpty()
   about: string;
 
   @ApiProperty({
-    description: 'Jobs associated with the master',
+    type: [JobDetailDto],
     example: [
-      { productId: 1, levelId: 2 },
-      { productId: 3, levelId: 4 },
+      {
+        prof_id: 1,
+        level_id: 2,
+        minworkhour: 40,
+        price_day: 100,
+        price_hour: 15,
+        experince: 5,
+      },
+      {
+        prof_id: 3,
+        level_id: 1,
+        minworkhour: 20,
+        price_day: 80,
+        price_hour: 12,
+        experince: 3,
+      },
     ],
   })
   @IsArray()
-  @ArrayMinSize(1)
-  @IsObject({ each: true })
-  jobs: Array<{ productId: number; levelId: number }>;
+  @ValidateNested({ each: true })
+  @Type(() => JobDetailDto)
+  jobs: JobDetailDto[];
 }
-
-
-
-
-
-
-// adawd

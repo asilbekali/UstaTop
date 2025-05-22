@@ -130,7 +130,7 @@ model productTools {
 model master {
   id            Int             @id @default(autoincrement())
   full_name     String
-  email         String
+  email         String          @unique()
   isActive      Boolean         @default(true)
   year          Int
   image         String

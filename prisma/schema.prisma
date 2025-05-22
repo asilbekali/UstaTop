@@ -36,6 +36,8 @@ model user {
   regionId  Int
   role      role
   status    UserStatus?
+  order     order[]
+  backet    backet[]
 }
 
 model level {
@@ -62,22 +64,22 @@ model size {
 }
 
 model tools {
-  id           Int            @id @default(autoincrement())
-  name         String
-  price        Int
-  count        Int
-  code         Int            @unique @default(autoincrement())
-  isActive     Boolean        @default(false)
-  capasityId   Int
-  capasity     capasity       @relation(fields: [capasityId], references: [id])
-  size         size           @relation(fields: [sizeId], references: [id])
-  image        String
-  createAt     DateTime       @default(now())
-  sizeId       Int
-  brend        brend          @relation(fields: [brendId], references: [id])
-  brendId      Int
-  order_iteam  order_iteam[]
-  productTools productTools[]
+  id              Int               @id @default(autoincrement())
+  name            String
+  price           Int
+  count           Int
+  code            Int               @unique @default(autoincrement())
+  isActive        Boolean           @default(false)
+  capasityId      Int
+  capasity        capasity          @relation(fields: [capasityId], references: [id])
+  size            size              @relation(fields: [sizeId], references: [id])
+  image           String
+  createAt        DateTime          @default(now())
+  sizeId          Int
+  brend           brend             @relation(fields: [brendId], references: [id])
+  brendId         Int
+  productTools    productTools[]
+  orderIteamTools orderIteamTools[]
 }
 
 model capasity {
@@ -86,8 +88,6 @@ model capasity {
   createAt DateTime @default(now())
   tools    tools[]
 }
-
-// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
 
 model product {
   id            Int             @id @default(autoincrement())
@@ -98,10 +98,8 @@ model product {
   order_iteam   order_iteam[]
   productLevel  productLevel[]
   productTools  productTools[]
-  masterProduct masterProduct[] // adawd
+  masterProduct masterProduct[]
 }
-
-// /---------------------------------------------------------------------------
 
 model productLevel {
   id        Int     @id @default(autoincrement())
@@ -125,8 +123,6 @@ model productTools {
   createAt  DateTime @default(now())
 }
 
-// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
-
 model master {
   id            Int             @id @default(autoincrement())
   full_name     String
@@ -140,8 +136,6 @@ model master {
   createAt      DateTime        @default(now())
   masterProduct masterProduct[]
 }
-
-// /---------------------------------------------------------------------------
 
 model masterProduct {
   id          Int      @id @default(autoincrement())
@@ -158,10 +152,6 @@ model masterProduct {
   createAt    DateTime @default(now())
 }
 
-// /////////////////////////////////////////////////////////////////////////////
-
-// poisfdffffffffffffffffffffffffdvndodivfndo;invo;dsnfvvodnfvopdnsvopndsfvpjsndfvdsknvpopkmwkdjdvfnk;jfvnwk;edjfvno;ewjvn;owejvno;wejrnvo;ewnvno;ewrvno;wienrvio;weinvwo;nevoenovinkovn
-
 model comment {
   id       Int      @id @default(autoincrement())
   message  String
@@ -171,29 +161,38 @@ model comment {
 }
 
 model order_iteam {
-  id           Int      @id @default(autoincrement())
-  product      product  @relation(fields: [productId], references: [id])
-  productLevel level    @relation(fields: [levelId], references: [id])
-  count        Int
-  measuer      measuer
-  total        Int
-  location     String
-  address      String
-  data         DateTime
-  pymentType   String
-  withDeliver  Boolean
-  status       Boolean  @default(true)
-  tools        tools    @relation(fields: [toolsId], references: [id])
-  createAt     DateTime @default(now())
-  productId    Int
-  levelId      Int
-  toolsId      Int
-  backetId     Int
-  backet       backet   @relation(fields: [backetId], references: [id])
+  id              Int               @id @default(autoincrement())
+  product         product           @relation(fields: [productId], references: [id])
+  productLevel    level             @relation(fields: [levelId], references: [id])
+  count           Int
+  measuer         measuer
+  user_Id         Int
+  location        String
+  address         String
+  data            DateTime
+  withDeliver     Boolean
+  status          Boolean           @default(true)
+  createAt        DateTime          @default(now())
+  productId       Int
+  levelId         Int
+  backetId        Int
+  backet          backet            @relation(fields: [backetId], references: [id])
+  orderIteamTools orderIteamTools[]
+}
+
+model orderIteamTools {
+  id            Int         @id @default(autoincrement())
+  toolsId       Int
+  tools         tools       @relation(fields: [toolsId], references: [id])
+  order_iteamId Int
+  order_iteam   order_iteam @relation(fields: [order_iteamId], references: [id])
+  createAt      DateTime    @default(now())
 }
 
 model order {
   id                Int                 @id @default(autoincrement())
+  userId            Int
+  user              user                @relation(fields: [userId], references: [id])
   createAt          DateTime            @default(now())
   admin_check_order admin_check_order[]
   backetId          Int
@@ -203,8 +202,9 @@ model order {
 model backet {
   id          Int           @id @default(autoincrement())
   createAt    DateTime      @default(now())
+  userId      Int
+  user        user          @relation(fields: [userId], references: [id])
   order_iteam order_iteam[]
-  order_Id    Int
   order       order[]
 }
 
@@ -215,9 +215,6 @@ model admin_check_order {
   status   status
   createAt DateTime @default(now())
 }
-
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// No SQL tables
 
 model my_sessions {
   id         Int      @id @default(autoincrement())
@@ -260,9 +257,6 @@ model faq {
   question String
   answer   String
 }
-
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Enuml
 
 enum UserType {
   yuridik

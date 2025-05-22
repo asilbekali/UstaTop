@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger'; // <-- buni qo'shing
 import { MasterService } from './master.service';

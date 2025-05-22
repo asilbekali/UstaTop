@@ -20,6 +20,8 @@ import { ProductModule } from './product/product.module';
 import { ProductLevelModule } from './product-level/product-level.module';
 import { ProductToolsModule } from './product-tools/product-tools.module';
 import { CommentModule } from './comment/comment.module';
+import { OrderIteamModule } from './order_iteam/order_iteam.module';
+import { BacketModule } from './backet/backet.module';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { CommentModule } from './comment/comment.module';
     ProductLevelModule,
     ProductToolsModule,
     CommentModule,
+    OrderIteamModule,
+    BacketModule,
   ],
   controllers: [AppController],
   providers: [AppService],

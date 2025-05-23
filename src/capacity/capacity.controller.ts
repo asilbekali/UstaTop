@@ -25,7 +25,7 @@ import { RoleDec } from 'src/No_Connection_Tables/user/decorator/roles.decorator
 import { Role } from 'src/No_Connection_Tables/user/enum/role.enum';
 import { RolesGuard } from 'src/No_Connection_Tables/Guards/roles.guard';
 
-@UseGuards(AuthGuard)
+
 @ApiTags('Capacities')
 @Controller('capacity')
 export class CapacityController {
@@ -33,6 +33,7 @@ export class CapacityController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new capacity' })
   @ApiBody({
@@ -80,6 +81,7 @@ export class CapacityController {
 
   @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a capacity by ID' })
   @ApiParam({
@@ -109,6 +111,7 @@ export class CapacityController {
 
   @RoleDec(Role.ADMIN)
   @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a capacity by ID' })
   @ApiParam({

@@ -14,7 +14,10 @@ import {
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AuthGuard } from 'src/No_Connection_Tables/Guards/auth.guard';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { RoleDec } from 'src/No_Connection_Tables/user/decorator/roles.decorator';
+import { Role } from 'src/No_Connection_Tables/user/enum/role.enum';
+import { RolesGuard } from 'src/No_Connection_Tables/Guards/roles.guard';
 
 @Controller('order')
 export class OrderController {
@@ -79,5 +82,35 @@ export class OrderController {
   @Delete(':id')
   remove(@Param('id') id: number, @Req() req: Request) {
     return this.orderService.remove(+id, req);
+  }
+
+  @RoleDec(Role.ADMIN, Role.SUPER_ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  @Post('orderAcceptance')
+  @ApiOperation({
+    summary: 'Accept an order and update related master records',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        order_id: {
+          type: 'number',
+          example: 123,
+          description: 'The ID of the order to be accepted',
+        },
+      },
+      required: ['order_id'],
+    },
+  })
+  @ApiResponse({ status: 200, description: 'Order accepted successfully.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Order not found or no items in the order.',
+  })
+  orderAcceptance(@Body() body: { order_id: number }) {
+    const { order_id } = body;
+    return this.orderService.orderAcceptance(order_id);
   }
 }

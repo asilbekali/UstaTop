@@ -125,6 +125,8 @@ export class UserService {
     const secret = authenticator.generateSecret();
     const otp = authenticator.generate(secret);
 
+    console.log(otp);
+
     await this.mailer.sendEmail(newUser.email, 'Your OTP password', otp);
 
     this.otpStore.set(newUser.email, {
@@ -284,11 +286,4 @@ export class UserService {
 
     return newSession;
   }
-
-
-
-  
-
-  
-
 }

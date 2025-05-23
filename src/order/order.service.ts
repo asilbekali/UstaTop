@@ -97,37 +97,36 @@ export class OrderService {
     };
   }
 
-async create(dto: CreateOrderDto, req: Request) {
-  const bazaBacket = await this.prisma.backet.findFirst({
-    where: { id: dto.backetId },
-  });
+  async create(dto: CreateOrderDto, req: Request) {
+    const bazaBacket = await this.prisma.backet.findFirst({
+      where: { id: dto.backetId },
+    });
 
-  if (!bazaBacket) {
-    throw new BadRequestException('Backet not found');
+    if (!bazaBacket) {
+      throw new BadRequestException('Backet not found');
+    }
+
+    const payStatus = dto.pay ? status.payed : status.pending;
+
+    const createdOrder = await this.prisma.order.create({
+      data: {
+        backetId: dto.backetId,
+        userId: req['user'].id,
+        pay: payStatus,
+      },
+    });
+
+    await this.prisma.order_iteam.updateMany({
+      where: {
+        backetId: dto.backetId,
+      },
+      data: {
+        status: false,
+      },
+    });
+
+    return createdOrder;
   }
-
-  const payStatus = dto.pay ? status.payed : status.pending;
-
-  const createdOrder = await this.prisma.order.create({
-    data: {
-      backetId: dto.backetId,
-      userId: req['user'].id,
-      pay: payStatus,
-    },
-  });
-
-  await this.prisma.order_iteam.updateMany({
-    where: {
-      backetId: dto.backetId,
-    },
-    data: {
-      status: false,
-    },
-  });
-
-  return createdOrder;
-}
-
 
   async findAll(paginationOptions: {
     page: number;
@@ -181,5 +180,60 @@ async create(dto: CreateOrderDto, req: Request) {
     }
 
     return this.prisma.order.delete({ where: { id } });
+  }
+
+  async orderAcceptance(order_id: number) {
+    const bazaOrder = await this.prisma.order.findFirst({
+      where: { id: order_id },
+      include: {
+        backet: {
+          include: {
+            order_iteam: true,
+          },
+        },
+      },
+    });
+
+    if (!bazaOrder || !bazaOrder.backet || !bazaOrder.backet.order_iteam) {
+      throw new BadRequestException('Order not found or no items in the order');
+    }
+
+    for (const item of bazaOrder.backet.order_iteam) {
+      const masterProduct = await this.prisma.masterProduct.findFirst({
+        where: {
+          id: item.productId,
+          levelId: item.levelId,
+        },
+      });
+
+      if (!masterProduct) {
+        console.log(
+          `Master product not found for productId: ${item.productId}, levelId: ${item.levelId}`,
+        );
+        continue;
+      }
+
+      const master = await this.prisma.master.findFirst({
+        where: { id: masterProduct.masterId },
+      });
+
+      if (!master) {
+        console.log(`Master not found for masterId: ${masterProduct.masterId}`);
+        continue;
+      }
+
+      await this.prisma.master.update({
+        where: { id: master.id },
+        data: { isWork: true },
+      });
+
+      console.log(
+        `Master updated: Master ID: ${master.id}, isWork set to true`,
+      );
+    }
+
+    return {
+      message: 'Order accepted and master records updated successfully.',
+    };
   }
 }

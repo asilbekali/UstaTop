@@ -48,6 +48,7 @@ export class MasterService {
         passpoerImage: dto.passpoerImage,
         about: dto.about,
         star: 0,
+        isWork: false,
       },
     });
 

@@ -134,6 +134,7 @@ model master {
   star          Int
   about         String
   createAt      DateTime        @default(now())
+  isWork        Boolean         @default(false)
   masterProduct masterProduct[]
 }
 

@@ -13,6 +13,8 @@ export class LevelService {
     });
 
     if(bazaLevel){
+      console.log(bazaLevel);
+      
       throw new BadRequestException("Level name must be uniqe !")
     }
 

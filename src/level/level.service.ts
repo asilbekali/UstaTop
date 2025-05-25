@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { PrismaService } from 'src/No_Connection_Tables/prisma/prisma.service';
@@ -8,6 +8,14 @@ export class LevelService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createLevelDto: CreateLevelDto) {
+    const bazaLevel = await this.prisma.level.findFirst({
+      where: { name: createLevelDto.name },
+    });
+
+    if(bazaLevel){
+      throw new BadRequestException("Level name must be uniqe !")
+    }
+
     try {
       return await this.prisma.level.create({
         data: {

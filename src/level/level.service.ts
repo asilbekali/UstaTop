@@ -12,6 +12,9 @@ export class LevelService {
       where: { name: createLevelDto.name },
     });
 
+    console.log(bazaLevel);
+    
+
     if(bazaLevel){
       console.log(bazaLevel);
       

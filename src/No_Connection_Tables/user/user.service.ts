@@ -25,6 +25,14 @@ export class UserService {
 
   private otpStore = new Map<string, { otp: string; expiresAt: number }>();
 
+  async myProfileService(req: Request) {
+    const bazaUser = await this.prisma.user.findFirst({
+      where: { id: req['user'].id },
+    });
+
+    return bazaUser;
+  }
+
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }

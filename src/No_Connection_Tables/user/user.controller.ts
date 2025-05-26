@@ -8,6 +8,7 @@ import {
   Delete,
   BadRequestException,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -19,13 +20,20 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Request } from 'express';
+import { AuthGuard } from '../Guards/auth.guard';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  
+  @UseGuards(AuthGuard)
+  @Get('my-profile')
+  async myProfile(@Req() req: Request) {
+    return this.userService.myProfileService(req);
+  }
+
   @Get('mySession')
   async session(@Req() req: Request) {
     return this.userService.logDeviceInfo(req);

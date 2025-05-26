@@ -29,9 +29,9 @@ import { AuthGuard } from '../Guards/auth.guard';
 export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 
-  // @RoleDec(Role.ADMIN)
-  // @UseGuards(RolesGuard)
-  // @UseGuards(AuthGuard)
+  @RoleDec(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new region' })
   @ApiBody({ type: CreateRegionDto })

@@ -33,10 +33,6 @@ export class UserService {
     return bazaUser;
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
-
   async findAll() {
     return await this.prisma.user.findMany();
   }

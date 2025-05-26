@@ -4,6 +4,7 @@ import { UserController } from './user.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { MailService } from '../mail/mail.service';
 import { PrismaModule } from '../prisma/prisma.module';
+import { TgModule } from 'src/tg/tg.module';
 @Module({
   imports: [
     PrismaModule,
@@ -12,6 +13,7 @@ import { PrismaModule } from '../prisma/prisma.module';
       signOptions: { expiresIn: '1h' },
       global: true,
     }),
+    TgModule
   ],
   controllers: [UserController],
   providers: [UserService, MailService],

@@ -23,6 +23,7 @@ import { CommentModule } from './comment/comment.module';
 import { OrderIteamModule } from './order_iteam/order_iteam.module';
 import { BacketModule } from './backet/backet.module';
 import { OrderModule } from './order/order.module';
+import { TgModule } from './tg/tg.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { OrderModule } from './order/order.module';
     OrderIteamModule,
     BacketModule,
     OrderModule,
+    TgModule,
   ],
   controllers: [AppController],
   providers: [AppService],

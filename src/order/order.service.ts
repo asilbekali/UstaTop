@@ -2,10 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { PrismaService } from 'src/No_Connection_Tables/prisma/prisma.service';
 import { status } from '@prisma/client';
+import { TgService } from 'src/tg/tg.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly tg: TgService,
+  ) {}
 
   async payOrder(req: Request, orderId: number) {
     const userId = await req['user'].id;
@@ -124,6 +128,10 @@ export class OrderService {
         status: false,
       },
     });
+
+    await this.tg.sendMessageToAdmin(
+      'Created new order please show web site !',
+    );
 
     return createdOrder;
   }

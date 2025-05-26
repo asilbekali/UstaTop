@@ -133,8 +133,7 @@ export class OrderService {
       'Created new order please show web site !',
     );
 
-    console.log("message send");
-    
+    console.log('message send');
 
     return createdOrder;
   }
@@ -193,7 +192,7 @@ export class OrderService {
     return this.prisma.order.delete({ where: { id } });
   }
 
-  async orderAcceptance(order_id: number) {
+  async orderAcceptance(order_id: number, masterId: number) {
     const bazaOrder = await this.prisma.order.findFirst({
       where: { id: order_id },
       include: {
@@ -209,42 +208,25 @@ export class OrderService {
       throw new BadRequestException('Order not found or no items in the order');
     }
 
-    for (const item of bazaOrder.backet.order_iteam) {
-      const masterProduct = await this.prisma.masterProduct.findFirst({
-        where: {
-          id: item.productId,
-          levelId: item.levelId,
-        },
-      });
+    const master = await this.prisma.master.findFirst({
+      where: { id: masterId },
+    });
 
-      if (!masterProduct) {
-        console.log(
-          `Master product not found for productId: ${item.productId}, levelId: ${item.levelId}`,
-        );
-        continue;
-      }
-
-      const master = await this.prisma.master.findFirst({
-        where: { id: masterProduct.masterId },
-      });
-
-      if (!master) {
-        console.log(`Master not found for masterId: ${masterProduct.masterId}`);
-        continue;
-      }
-
-      await this.prisma.master.update({
-        where: { id: master.id },
-        data: { isWork: true },
-      });
-
-      console.log(
-        `Master updated: Master ID: ${master.id}, isWork set to true`,
+    if (!master) {
+      throw new BadRequestException(
+        `Master not found for masterId: ${masterId}`,
       );
     }
 
+    await this.prisma.master.update({
+      where: { id: master.id },
+      data: { isWork: true },
+    });
+
+    console.log(`Master updated: Master ID: ${master.id}, isWork set to true`);
+
     return {
-      message: 'Order accepted and master records updated successfully.',
+      message: `Order accepted and master (ID: ${masterId}) updated successfully.`,
     };
   }
 }

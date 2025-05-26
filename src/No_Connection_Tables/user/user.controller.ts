@@ -28,16 +28,16 @@ import { AuthGuard } from '../Guards/auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('mySession')
+  async session(@Req() req: Request) {
+    return this.userService.logDeviceInfo(req);
+  }
+
   // test
   @UseGuards(AuthGuard)
   @Get('my-profile')
   async myProfile(@Req() req: Request) {
     return this.userService.myProfileService(req);
-  }
-
-  @Get('mySession')
-  async session(@Req() req: Request) {
-    return this.userService.logDeviceInfo(req);
   }
 
   @Post('register')

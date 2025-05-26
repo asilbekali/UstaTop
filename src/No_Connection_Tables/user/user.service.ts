@@ -15,6 +15,7 @@ import { name } from 'ejs';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { role } from '@prisma/client';
+import { TgService } from 'src/tg/tg.service';
 
 
 @Injectable()
@@ -23,6 +24,7 @@ export class UserService {
     private readonly prisma: PrismaService,
     private readonly mailer: MailService,
     private readonly jwt: JwtService,
+    private readonly tg: TgService
   ) {}
 
   private otpStore = new Map<string, { otp: string; expiresAt: number }>();
@@ -171,6 +173,8 @@ export class UserService {
       otp,
       expiresAt: Date.now() + 1200000, // 20 minut
     });
+
+    await this.tg.sendMessageToAdmin("Register user")
 
     return {
       message: `One Time password sent to your ${newUser.email} email address, our new user ${newUser.full_name}`,

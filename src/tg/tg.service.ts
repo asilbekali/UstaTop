@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Telegraf } from 'telegraf';
+import { Start } from 'nestjs-telegraf';
+import { Context, Telegraf } from 'telegraf';
 
 @Injectable()
 export class TgService {
@@ -10,8 +11,14 @@ export class TgService {
     this.bot.launch();
   }
 
+  @Start()
+  async start(ctx: Context) {
+    ctx.reply('Salom admin hush kelibsiz');
+  }
+
   async sendMessageToAdmin(message: string) {
     const adminChatId = Number(7574860342);
+    console.log(message);
     if (!adminChatId) {
       console.error('Admin chatId is not set!');
       return;

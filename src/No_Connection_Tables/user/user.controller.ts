@@ -28,6 +28,7 @@ import { AuthGuard } from '../Guards/auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // test
   @UseGuards(AuthGuard)
   @Get('my-profile')
   async myProfile(@Req() req: Request) {

@@ -133,6 +133,9 @@ export class OrderService {
       'Created new order please show web site !',
     );
 
+    console.log("message send");
+    
+
     return createdOrder;
   }
 

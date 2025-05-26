@@ -100,17 +100,31 @@ export class OrderController {
           example: 123,
           description: 'The ID of the order to be accepted',
         },
+        master_id: {
+          type: 'number',
+          example: 456,
+          description: 'The ID of the master to be updated',
+        },
       },
-      required: ['order_id'],
+      required: ['order_id', 'master_id'],
     },
   })
   @ApiResponse({ status: 200, description: 'Order accepted successfully.' })
   @ApiResponse({
     status: 400,
-    description: 'Order not found or no items in the order.',
+    description: 'Order not found, no items in the order, or master not found.',
   })
-  orderAcceptance(@Body() body: { order_id: number }) {
-    const { order_id } = body;
-    return this.orderService.orderAcceptance(order_id);
+  async orderAcceptance(@Body() body: { order_id: number; master_id: number }) {
+    const { order_id, master_id } = body;
+
+    // Validate inputs
+    if (!order_id || !master_id) {
+      throw new BadRequestException(
+        'order_id and master_id are required fields.',
+      );
+    }
+
+    // Call the service method
+    return this.orderService.orderAcceptance(order_id, master_id);
   }
 }

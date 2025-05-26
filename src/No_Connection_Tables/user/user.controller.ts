@@ -22,6 +22,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from 'express';
 import { AuthGuard } from '../Guards/auth.guard';
+import { RoleDec } from './decorator/roles.decorator';
+import { Role } from './enum/role.enum';
+import { RolesGuard } from '../Guards/roles.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -103,6 +106,9 @@ export class UserController {
     return this.userService.login(password, email, req);
   }
 
+  @RoleDec(Role.ADMIN, Role.VIWER_ADMIN, Role.SUPER_ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({

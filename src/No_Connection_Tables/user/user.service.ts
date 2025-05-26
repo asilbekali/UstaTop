@@ -34,7 +34,17 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      select: {
+        id: true,
+        full_name: true,
+        email: true,
+        type: true,
+        regionId: true,
+        role: true,
+        status: true,
+      },
+    });
   }
 
   async findOne(id: number) {

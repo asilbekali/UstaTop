@@ -14,6 +14,8 @@ import { Request } from 'express';
 import { name } from 'ejs';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
+import { role } from '@prisma/client';
+
 
 @Injectable()
 export class UserService {
@@ -24,6 +26,28 @@ export class UserService {
   ) {}
 
   private otpStore = new Map<string, { otp: string; expiresAt: number }>();
+
+  async addAdminService(userId: number, roleValue: string) {
+    const allowedRoles: role[] = [
+      'admin',
+      'super_admin',
+      'viwer_admin',
+      'user_fiz',
+      'user_yur',
+    ];
+    if (!allowedRoles.includes(roleValue as role)) {
+      throw new BadRequestException('Invalid role provided');
+    }
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException(`User with id ${userId} not found`);
+    }
+
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: { role: roleValue as role },
+    });
+  }
 
   async myProfileService(req: Request) {
     const bazaUser = await this.prisma.user.findFirst({

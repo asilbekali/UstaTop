@@ -31,12 +31,80 @@ import { RolesGuard } from '../Guards/roles.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Post('add-admin')
+  @ApiOperation({
+    summary: 'Assign a role to a user',
+    description:
+      'Assign a specific role to a user by providing userId and role.',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        userId: {
+          type: 'number',
+          example: 1,
+          description: 'The ID of the user to be assigned the role.',
+        },
+        role: {
+          type: 'string',
+          example: 'admin',
+          description:
+            'The role to be assigned. Must be one of: admin, super_admin, viwer_admin, user_fiz, user_yur.',
+        },
+      },
+      required: ['userId', 'role'],
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Role assigned successfully.',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number', example: 1 },
+        role: { type: 'string', example: 'admin' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid role provided or missing required fields.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found.',
+  })
+  async addAdmin(@Body() body: { userId: number; role: string }) {
+    const { userId, role } = body;
+
+    const allowedRoles = [
+      'admin',
+      'super_admin',
+      'viwer_admin',
+      'user_fiz',
+      'user_yur',
+    ];
+
+    if (!allowedRoles.includes(role)) {
+      throw new BadRequestException(
+        `Invalid role provided. Allowed roles: ${allowedRoles.join(', ')}`,
+      );
+    }
+
+    const userExists = await this.userService.findOne(userId);
+    if (!userExists) {
+      throw new BadRequestException('User not found.');
+    }
+  
+    return this.userService.addAdminService(userId, role);
+  }
+
   @Get('mySession')
   async session(@Req() req: Request) {
     return this.userService.logDeviceInfo(req);
   }
 
-  // test
   @UseGuards(AuthGuard)
   @Get('my-profile')
   async myProfile(@Req() req: Request) {
@@ -55,15 +123,15 @@ export class UserController {
           full_name: 'John Doe',
           email: 'asilbeknt7@gmail.com',
           password: 'password123',
-          type: 'yuridik', // misol uchun
+          type: 'yuridik', 
           region: 3,
           bank: 'Some Bank',
           address: '123 Main St',
           pc: '123456',
           inn: '987654321',
           mfo: '123456',
-          okend: '123456', // qo'shimcha maydon
-          role: 'user_yur', // role enum ga mos
+          okend: '123456', 
+          role: 'user_yur', 
         },
       },
     },

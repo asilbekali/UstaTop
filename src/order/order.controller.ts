@@ -117,14 +117,12 @@ export class OrderController {
   async orderAcceptance(@Body() body: { order_id: number; master_id: number }) {
     const { order_id, master_id } = body;
 
-    // Validate inputs
     if (!order_id || !master_id) {
       throw new BadRequestException(
         'order_id and master_id are required fields.',
       );
     }
 
-    // Call the service method
     return this.orderService.orderAcceptance(order_id, master_id);
   }
 }

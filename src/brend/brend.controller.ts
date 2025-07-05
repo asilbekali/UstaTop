@@ -18,14 +18,14 @@ import { RoleDec } from 'src/No_Connection_Tables/user/decorator/roles.decorator
 import { Role } from 'src/No_Connection_Tables/user/enum/role.enum';
 import { RolesGuard } from 'src/No_Connection_Tables/Guards/roles.guard';
 
-@RoleDec(Role.ADMIN)
-@UseGuards(RolesGuard)
-@UseGuards(AuthGuard)
 @ApiTags('brend')
 @Controller('brend')
 export class BrendController {
   constructor(private readonly brendService: BrendService) {}
 
+  @RoleDec(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new brend' })
   @ApiResponse({
@@ -45,6 +45,8 @@ export class BrendController {
     return this.brendService.create(createBrendDto);
   }
 
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOperation({
     summary: 'Get list of brends with pagination and optional name filter',
@@ -99,6 +101,8 @@ export class BrendController {
     });
   }
 
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Get brend by ID' })
   @ApiResponse({
